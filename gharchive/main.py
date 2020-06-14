@@ -19,13 +19,10 @@ class GHArchive:
 
     def get(
         self,
-        year: Optional[int] = None,
-        month: Optional[int] = None,
-        day: Optional[int] = None,
-        hour: Optional[int] = None,
-        dt: Optional[datetime.datetime] = None,
+        start_date: str,
+        end_date: Optional[str] = None
     ) -> Archive:
-        dates = SearchDates(year, month, day, hour, dt)
+        dates = SearchDates(start_date, end_date)
         archive = self._get_many_and_decode(dates)
         return archive
 
@@ -54,6 +51,7 @@ class GHArchive:
         resp = requests.get(url)
         if resp.status_code != 200:
             raise NoArchiveForDateException(f'Got status code {resp.status_code} for date {date}. Content: {resp.text}')
+        return resp
 
     def _decode_response(self, resp: requests.Response) -> Archive:
         return Archive.from_response(resp)

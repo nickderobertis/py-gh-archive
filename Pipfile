@@ -23,6 +23,7 @@ pypandoc = "*"
 cruft = "*"
 requests = "*"
 jupyterlab = "*"
+pandas = "*"
 
 [requires]
 python_version = "3.7"
