@@ -5,8 +5,10 @@ import requests
 import gzip
 import json
 
+from gharchive.exc import NoArchiveForDateException, NoArchiveMatchingCriteraException
 from gharchive.logger import logger
 from gharchive.models import Archive
+from gharchive.search import SearchDates
 
 BASE_URL = "https://data.gharchive.org/"
 
@@ -23,42 +25,35 @@ class GHArchive:
         hour: Optional[int] = None,
         dt: Optional[datetime.datetime] = None,
     ) -> Archive:
-        self._validate_get(year, month, day, hour, dt)
-        if dt is None:
-            dt = datetime.datetime(year, month, day, hour)
-        date_str = dt.strftime("%Y-%m-%d-%H")
-        resp = self._get(date_str)
-        archive = self._decode_response(resp)
+        dates = SearchDates(year, month, day, hour, dt)
+        archive = self._get_many_and_decode(dates)
         return archive
+
+    def _get_many_and_decode(self, dates: SearchDates) -> Archive:
+        full_archive = None
+        for i, search_date in enumerate(dates.strings):
+            try:
+                resp = self._get(str(search_date))
+            except NoArchiveForDateException as e:
+                logger.warning(str(e))
+                continue
+            archive = self._decode_response(resp)
+            if i == 0:
+                full_archive = archive
+            else:
+                full_archive += archive
+
+        if full_archive is None:
+            raise NoArchiveMatchingCriteraException(f'Could not find any archives with search dates: {dates.strings}')
+
+        return full_archive
 
     def _get(self, date: str) -> requests.Response:
         url = f"{BASE_URL}{date}.json.gz"
         logger.debug(f"Requesting url: {url}")
-        return requests.get(url)
+        resp = requests.get(url)
+        if resp.status_code != 200:
+            raise NoArchiveForDateException(f'Got status code {resp.status_code} for date {date}. Content: {resp.text}')
 
     def _decode_response(self, resp: requests.Response) -> Archive:
         return Archive.from_response(resp)
-
-    def _validate_get(
-        self,
-        year: Optional[int] = None,
-        month: Optional[int] = None,
-        day: Optional[int] = None,
-        hour: Optional[int] = None,
-        dt: Optional[datetime.datetime] = None,
-    ):
-        if dt is None:
-            if year is None or month is None or day is None or hour is None:
-                raise ValueError(
-                    "must provide either dt or year, month, day, and hour"
-                )
-        if dt is not None:
-            if (
-                year is not None
-                or month is not None
-                or day is not None
-                or hour is not None
-            ):
-                raise ValueError(
-                    "cannot provide both dt and year, month, day, or hour"
-                )

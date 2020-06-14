@@ -56,6 +56,8 @@ def from_datetime(x: Any) -> datetime:
 # and so come in a different format. Need to parse them into the same models.
 # Currently the code will fail to parse any responses from this time period.
 # There is already a 2012-06-14-15.json.gz in the test data which triggers this.
+# Also update gharchive.search.SUPPORTED_BEGIN_YEAR after this and add constraints
+# for not being earlier in 2011.
 
 class Actor:
     id: Optional[int]
@@ -354,3 +356,8 @@ class Archive:
 
     def to_dict_list(self) -> List[dict]:
         return [elem.to_dict() for elem in self.data]
+
+    def __add__(self, other):
+        cls = self.__class__
+        return cls(self.data + other.data)
+
