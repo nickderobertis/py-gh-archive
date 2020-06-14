@@ -50,6 +50,12 @@ def from_list(f: Callable[[Any], T], x: Any) -> List[T]:
 def from_datetime(x: Any) -> datetime:
     return dateutil.parser.parse(x)
 
+# TODO: support Timeline API format
+#
+# Any records from 2/12/2011-12/31/2014 were from the deprecated Timeline API
+# and so come in a different format. Need to parse them into the same models.
+# Currently the code will fail to parse any responses from this time period.
+# There is already a 2012-06-14-15.json.gz in the test data which triggers this.
 
 class Actor:
     id: Optional[int]
@@ -336,7 +342,11 @@ class Archive:
 
     @classmethod
     def from_response(cls, resp: requests.Response):
-        data_str = gzip.decompress(resp.content).decode('utf8')
+        return cls.from_gzip_bytes(resp.content)
+
+    @classmethod
+    def from_gzip_bytes(cls, b: bytes):
+        data_str = gzip.decompress(b).decode('utf8')
         data_strs = [s for s in data_str.split('\n') if s]
         json_str = '[' + ', '.join(data_strs) + ']'
         data = json.loads(json_str)
