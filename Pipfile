@@ -21,6 +21,8 @@ pytest-cov = "*"
 mypy = "*"
 pypandoc = "*"
 cruft = "*"
+requests = "*"
+jupyterlab = "*"
 
 [requires]
 python_version = "3.7"
