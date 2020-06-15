@@ -62,7 +62,7 @@ def from_datetime(x: Any) -> datetime:
     return dateutil.parser.parse(x)
 
 
-# TODO [$5ee6d36c9eb0e300071e2fd6]: support Timeline API format
+# TODO [#1]: support Timeline API format
 #
 # Any records from 2/12/2011-12/31/2014 were from the deprecated Timeline API
 # and so come in a different format. Need to parse them into the same models.
