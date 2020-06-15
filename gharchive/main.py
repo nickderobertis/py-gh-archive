@@ -64,18 +64,15 @@ class GHArchive:
         dates: SearchDates,
         filters: Optional[Sequence[Tuple[str, Union[int, float, str]]]] = None,
     ) -> Archive:
-        full_archive = None
-        for i, search_date in enumerate(dates.strings):
+        full_archive = Archive([])
+        for search_date in dates.strings:
             try:
                 resp = self._get(str(search_date))
             except NoArchiveForDateException as e:
                 logger.warning(str(e))
                 continue
             archive = self._decode_response(resp, filters)
-            if i == 0:
-                full_archive = archive
-            else:
-                full_archive += archive
+            full_archive += archive
 
         if full_archive is None:
             raise NoArchiveMatchingCriteraException(
