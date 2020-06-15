@@ -1,0 +1,51 @@
+gharchive package
+=================
+
+.. automodule:: gharchive
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+gharchive.exc module
+--------------------
+
+.. automodule:: gharchive.exc
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+gharchive.logger module
+-----------------------
+
+.. automodule:: gharchive.logger
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+gharchive.main module
+---------------------
+
+.. automodule:: gharchive.main
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+gharchive.models module
+-----------------------
+
+.. automodule:: gharchive.models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+gharchive.search module
+-----------------------
+
+.. automodule:: gharchive.search
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

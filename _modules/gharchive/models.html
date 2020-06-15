@@ -1,0 +1,618 @@
+
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>gharchive.models &mdash; gharchive 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/sphinx_paramlinks.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> gharchive
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Getting started with gharchive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">This is my gallery</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">gharchive</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">gharchive</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>gharchive.models</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for gharchive.models</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">gzip</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">TypeVar</span><span class="p">,</span>
+    <span class="n">Type</span><span class="p">,</span>
+    <span class="n">cast</span><span class="p">,</span>
+    <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">Sequence</span><span class="p">,</span>
+    <span class="n">Tuple</span><span class="p">,</span>
+    <span class="n">Union</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">dateutil.parser</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="from_int"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.from_int">[docs]</a><span class="k">def</span> <span class="nf">from_int</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span></div>
+
+
+<div class="viewcode-block" id="from_none"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.from_none">[docs]</a><span class="k">def</span> <span class="nf">from_none</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">assert</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">x</span></div>
+
+
+<div class="viewcode-block" id="from_union"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.from_union">[docs]</a><span class="k">def</span> <span class="nf">from_union</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fs</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+    <span class="k">assert</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="from_str"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.from_str">[docs]</a><span class="k">def</span> <span class="nf">from_str</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span></div>
+
+
+<div class="viewcode-block" id="from_bool"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.from_bool">[docs]</a><span class="k">def</span> <span class="nf">from_bool</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span></div>
+
+
+<div class="viewcode-block" id="to_class"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.to_class">[docs]</a><span class="k">def</span> <span class="nf">to_class</span><span class="p">(</span><span class="n">c</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">Any</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="from_list"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.from_list">[docs]</a><span class="k">def</span> <span class="nf">from_list</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">T</span><span class="p">],</span> <span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="from_datetime"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.from_datetime">[docs]</a><span class="k">def</span> <span class="nf">from_datetime</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">dateutil</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+
+
+<span class="c1"># TODO: support Timeline API format</span>
+<span class="c1">#</span>
+<span class="c1"># Any records from 2/12/2011-12/31/2014 were from the deprecated Timeline API</span>
+<span class="c1"># and so come in a different format. Need to parse them into the same models.</span>
+<span class="c1"># Currently the code will fail to parse any responses from this time period.</span>
+<span class="c1"># There is already a 2012-06-14-15.json.gz in the test data which triggers this.</span>
+<span class="c1"># Also update gharchive.search.SUPPORTED_BEGIN_YEAR after this and add constraints</span>
+<span class="c1"># for not being earlier in 2011.</span>
+
+
+<div class="viewcode-block" id="Actor"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Actor">[docs]</a><span class="k">class</span> <span class="nc">Actor</span><span class="p">:</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="n">login</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">display_login</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">gravatar_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">avatar_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Actor.__init__"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Actor.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+        <span class="n">login</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">display_login</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">gravatar_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">avatar_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">login</span> <span class="o">=</span> <span class="n">login</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">display_login</span> <span class="o">=</span> <span class="n">display_login</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gravatar_id</span> <span class="o">=</span> <span class="n">gravatar_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">avatar_url</span> <span class="o">=</span> <span class="n">avatar_url</span></div>
+
+<div class="viewcode-block" id="Actor.from_dict"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Actor.from_dict">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Actor&quot;</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
+        <span class="nb">id</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_int</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">))</span>
+        <span class="n">login</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;login&quot;</span><span class="p">))</span>
+        <span class="n">display_login</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;display_login&quot;</span><span class="p">))</span>
+        <span class="n">gravatar_id</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;gravatar_id&quot;</span><span class="p">))</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">))</span>
+        <span class="n">avatar_url</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;avatar_url&quot;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">Actor</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">login</span><span class="p">,</span> <span class="n">display_login</span><span class="p">,</span> <span class="n">gravatar_id</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">avatar_url</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Actor.to_dict"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Actor.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="n">result</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_int</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;login&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">login</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;display_login&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">display_login</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;gravatar_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">gravatar_id</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;avatar_url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">avatar_url</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div></div>
+
+
+<div class="viewcode-block" id="Author"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Author">[docs]</a><span class="k">class</span> <span class="nc">Author</span><span class="p">:</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">email</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Author.__init__"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Author.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">email</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">email</span></div>
+
+<div class="viewcode-block" id="Author.from_dict"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Author.from_dict">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Author&quot;</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">))</span>
+        <span class="n">email</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">Author</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Author.to_dict"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Author.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="n">result</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;email&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">email</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div></div>
+
+
+<div class="viewcode-block" id="Commit"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Commit">[docs]</a><span class="k">class</span> <span class="nc">Commit</span><span class="p">:</span>
+    <span class="n">sha</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">author</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Author</span><span class="p">]</span>
+    <span class="n">message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">distinct</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+    <span class="n">url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Commit.__init__"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Commit.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">sha</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">author</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Author</span><span class="p">],</span>
+        <span class="n">message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">distinct</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">],</span>
+        <span class="n">url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sha</span> <span class="o">=</span> <span class="n">sha</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">author</span> <span class="o">=</span> <span class="n">author</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distinct</span> <span class="o">=</span> <span class="n">distinct</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span></div>
+
+<div class="viewcode-block" id="Commit.from_dict"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Commit.from_dict">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Commit&quot;</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
+        <span class="n">sha</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sha&quot;</span><span class="p">))</span>
+        <span class="n">author</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">Author</span><span class="o">.</span><span class="n">from_dict</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;author&quot;</span><span class="p">))</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;message&quot;</span><span class="p">))</span>
+        <span class="n">distinct</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_bool</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;distinct&quot;</span><span class="p">))</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">Commit</span><span class="p">(</span><span class="n">sha</span><span class="p">,</span> <span class="n">author</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">distinct</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Commit.to_dict"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Commit.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="n">result</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;sha&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">sha</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;author&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">(</span>
+            <span class="p">[</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">to_class</span><span class="p">(</span><span class="n">Author</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">author</span>
+        <span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;distinct&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_bool</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">distinct</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div></div>
+
+
+<div class="viewcode-block" id="Payload"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Payload">[docs]</a><span class="k">class</span> <span class="nc">Payload</span><span class="p">:</span>
+    <span class="n">ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">ref_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">pusher_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">push_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="n">size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="n">distinct_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="n">head</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">before</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">commits</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Commit</span><span class="p">]]</span>
+
+<div class="viewcode-block" id="Payload.__init__"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Payload.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">ref_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">pusher_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">push_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+        <span class="n">size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+        <span class="n">distinct_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+        <span class="n">head</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">before</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">commits</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Commit</span><span class="p">]],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ref</span> <span class="o">=</span> <span class="n">ref</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ref_type</span> <span class="o">=</span> <span class="n">ref_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pusher_type</span> <span class="o">=</span> <span class="n">pusher_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">push_id</span> <span class="o">=</span> <span class="n">push_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distinct_size</span> <span class="o">=</span> <span class="n">distinct_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">head</span> <span class="o">=</span> <span class="n">head</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">before</span> <span class="o">=</span> <span class="n">before</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">commits</span> <span class="o">=</span> <span class="n">commits</span></div>
+
+<div class="viewcode-block" id="Payload.from_dict"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Payload.from_dict">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Payload&quot;</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
+        <span class="n">ref</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ref&quot;</span><span class="p">))</span>
+        <span class="n">ref_type</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ref_type&quot;</span><span class="p">))</span>
+        <span class="n">pusher_type</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pusher_type&quot;</span><span class="p">))</span>
+        <span class="n">push_id</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_int</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;push_id&quot;</span><span class="p">))</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_int</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;size&quot;</span><span class="p">))</span>
+        <span class="n">distinct_size</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_int</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;distinct_size&quot;</span><span class="p">))</span>
+        <span class="n">head</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;head&quot;</span><span class="p">))</span>
+        <span class="n">before</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;before&quot;</span><span class="p">))</span>
+        <span class="n">commits</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">(</span>
+            <span class="p">[</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">from_list</span><span class="p">(</span><span class="n">Commit</span><span class="o">.</span><span class="n">from_dict</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;commits&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">Payload</span><span class="p">(</span>
+            <span class="n">ref</span><span class="p">,</span>
+            <span class="n">ref_type</span><span class="p">,</span>
+            <span class="n">pusher_type</span><span class="p">,</span>
+            <span class="n">push_id</span><span class="p">,</span>
+            <span class="n">size</span><span class="p">,</span>
+            <span class="n">distinct_size</span><span class="p">,</span>
+            <span class="n">head</span><span class="p">,</span>
+            <span class="n">before</span><span class="p">,</span>
+            <span class="n">commits</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Payload.to_dict"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Payload.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="n">result</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;ref&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;ref_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref_type</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;pusher_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pusher_type</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;push_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_int</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">push_id</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_int</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;distinct_size&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_int</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">distinct_size</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;head&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">head</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;before&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">before</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;commits&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">(</span>
+            <span class="p">[</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">from_list</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">to_class</span><span class="p">(</span><span class="n">Commit</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">x</span><span class="p">),</span> <span class="n">from_none</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">commits</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div></div>
+
+
+<div class="viewcode-block" id="Repo"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Repo">[docs]</a><span class="k">class</span> <span class="nc">Repo</span><span class="p">:</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Repo.__init__"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Repo.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span></div>
+
+<div class="viewcode-block" id="Repo.from_dict"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Repo.from_dict">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Repo&quot;</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
+        <span class="nb">id</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_int</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">))</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">))</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">Repo</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Repo.to_dict"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Repo.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="n">result</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_int</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div></div>
+
+
+<div class="viewcode-block" id="ArchiveElement"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.ArchiveElement">[docs]</a><span class="k">class</span> <span class="nc">ArchiveElement</span><span class="p">:</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">actor</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Actor</span><span class="p">]</span>
+    <span class="n">repo</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Repo</span><span class="p">]</span>
+    <span class="n">payload</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Payload</span><span class="p">]</span>
+    <span class="n">public</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+    <span class="n">created_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span>
+
+<div class="viewcode-block" id="ArchiveElement.__init__"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.ArchiveElement.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="nb">type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">actor</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Actor</span><span class="p">],</span>
+        <span class="n">repo</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Repo</span><span class="p">],</span>
+        <span class="n">payload</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Payload</span><span class="p">],</span>
+        <span class="n">public</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">],</span>
+        <span class="n">created_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="nb">type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actor</span> <span class="o">=</span> <span class="n">actor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repo</span> <span class="o">=</span> <span class="n">repo</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">payload</span> <span class="o">=</span> <span class="n">payload</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">public</span> <span class="o">=</span> <span class="n">public</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">created_at</span> <span class="o">=</span> <span class="n">created_at</span></div>
+
+<div class="viewcode-block" id="ArchiveElement.from_dict"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.ArchiveElement.from_dict">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ArchiveElement&quot;</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
+        <span class="nb">id</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">))</span>
+        <span class="nb">type</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">))</span>
+        <span class="n">actor</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">Actor</span><span class="o">.</span><span class="n">from_dict</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;actor&quot;</span><span class="p">))</span>
+        <span class="n">repo</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">Repo</span><span class="o">.</span><span class="n">from_dict</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;repo&quot;</span><span class="p">))</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">Payload</span><span class="o">.</span><span class="n">from_dict</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;payload&quot;</span><span class="p">))</span>
+        <span class="n">public</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_bool</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;public&quot;</span><span class="p">))</span>
+        <span class="n">created_at</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_datetime</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;created_at&quot;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">ArchiveElement</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">actor</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">public</span><span class="p">,</span> <span class="n">created_at</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ArchiveElement.to_dict"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.ArchiveElement.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="n">result</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_str</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;actor&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">(</span>
+            <span class="p">[</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">to_class</span><span class="p">(</span><span class="n">Actor</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor</span>
+        <span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;repo&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">to_class</span><span class="p">(</span><span class="n">Repo</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">repo</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;payload&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">(</span>
+            <span class="p">[</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">to_class</span><span class="p">(</span><span class="n">Payload</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">payload</span>
+        <span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;public&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">([</span><span class="n">from_bool</span><span class="p">,</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">public</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;created_at&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_union</span><span class="p">(</span>
+            <span class="p">[</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span> <span class="n">from_none</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">created_at</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div></div>
+
+
+<div class="viewcode-block" id="Archive"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Archive">[docs]</a><span class="k">class</span> <span class="nc">Archive</span><span class="p">:</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ArchiveElement</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Archive.__init__"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Archive.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ArchiveElement</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="Archive.from_dict_list"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Archive.from_dict_list">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_dict_list</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]):</span>
+        <span class="n">archive_elems</span> <span class="o">=</span> <span class="p">[</span><span class="n">ArchiveElement</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">archive_elems</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Archive.from_response"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Archive.from_response">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_response</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">resp</span><span class="p">:</span> <span class="n">requests</span><span class="o">.</span><span class="n">Response</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_gzip_bytes</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">content</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Archive.from_gzip_bytes"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Archive.from_gzip_bytes">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_gzip_bytes</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="n">data_str</span> <span class="o">=</span> <span class="n">gzip</span><span class="o">.</span><span class="n">decompress</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
+        <span class="n">data_strs</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">data_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">s</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">data_str</span>
+        <span class="n">json_str</span> <span class="o">=</span> <span class="s2">&quot;[&quot;</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_strs</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+        <span class="k">del</span> <span class="n">data_strs</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_dict_list</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Archive.to_dict_list"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Archive.to_dict_list">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">elem</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">]</span></div>
+
+    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="bp">cls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Archive.filter"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Archive.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">filters</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Archive&quot;</span><span class="p">:</span>
+        <span class="n">new_elems</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="n">valid</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="n">filters</span><span class="p">:</span>
+                <span class="n">getattr_list</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+                <span class="n">filter_value</span> <span class="o">=</span> <span class="n">elem</span>
+                <span class="k">for</span> <span class="n">gattr</span> <span class="ow">in</span> <span class="n">getattr_list</span><span class="p">:</span>
+                    <span class="n">filter_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">filter_value</span><span class="p">,</span> <span class="n">gattr</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">filter_value</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+                    <span class="n">valid</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="n">valid</span><span class="p">:</span>
+                <span class="n">new_elems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span>
+        <span class="bp">cls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">new_elems</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Nick DeRobertis
+
+    </p>
+  </div>
+    
+    
+      Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    <!-- Theme Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-169369905-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+    
+   
+
+</body>
+</html>
