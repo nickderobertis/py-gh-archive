@@ -88,3 +88,30 @@ class TestCreateModels(unittest.TestCase):
             "public": True,
             "created_at": "2015-01-01T01:00:00+00:00",
         }
+
+
+class TestFilterModels(TestCreateModels):
+    def test_single_filter(self):
+        compare_str = "WatchEvent"
+        archive = self.archive.filter([("type", compare_str)])
+        for elem in archive.data:
+            assert elem.type == compare_str
+        assert len(archive.data) > 0
+
+    def test_nested_filter(self):
+        compare_str = "https://api.github.com/users/soumith"
+        archive = self.archive.filter([("actor.url", compare_str)])
+        for elem in archive.data:
+            assert elem.actor.url == compare_str
+        assert len(archive.data) > 0
+
+    def test_dual_filter(self):
+        compare_str_1 = "https://api.github.com/users/jamezb"
+        compare_str_2 = "WatchEvent"
+        archive = self.archive.filter(
+            [("actor.url", compare_str_1), ("type", compare_str_2)]
+        )
+        for elem in archive.data:
+            assert elem.actor.url == compare_str_1
+            assert elem.type == compare_str_2
+        assert len(archive.data) > 0
