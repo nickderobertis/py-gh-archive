@@ -11,10 +11,14 @@ Install via::
 Usage
 =========
 
-Some highlighted functionality.
-
 This is a simple example::
 
-    import gharchive
+    from gharchive import GHArchive
+    gh = GHArchive()
+
+    data = gh.get('6/8/2020', '6/10/2020', filters=[
+        ('repo.name', 'bitcoin/bitcoin'),
+        ('type', 'WatchEvent')
+    ])
 
 

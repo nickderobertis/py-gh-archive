@@ -18,9 +18,15 @@ pip install gharchive
 A simple example:
 
 ```python
-import gharchive
+from gharchive import GHArchive
+gh = GHArchive()
 
-# Do something with gharchive
+data = gh.get('6/8/2020', '6/10/2020', filters=[
+    ('repo.name', 'bitcoin/bitcoin'),
+    ('type', 'WatchEvent')
+])
+
+
 ```
 
 ## Links

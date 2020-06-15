@@ -14,8 +14,19 @@ BASE_URL = "https://data.gharchive.org/"
 
 
 class GHArchive:
-    def __init__(self):
-        pass
+    """
+    Main class for getting Github Archive data.
+
+    :Examples:
+
+        >>> from gharchive import GHArchive
+        >>> gh = GHArchive()
+        ...
+        >>> data = gh.get('6/8/2020', '6/10/2020', filters=[
+        >>>     ('repo.name', 'bitcoin/bitcoin'),
+        >>>     ('type', 'WatchEvent')
+        >>> ])
+    """
 
     def get(
         self,
@@ -23,6 +34,27 @@ class GHArchive:
         end_date: Optional[str] = None,
         filters: Optional[Sequence[Tuple[str, Union[int, float, str]]]] = None,
     ) -> Archive:
+        """
+        Get data from the Github Archive
+
+        :param start_date: string of date or datetime to start collection
+        :param end_date: string of date or datetime to end collection, defaults to
+        the same as start date
+        :param filters: filters in the format of two-element tuples for which
+        the first element is the . separated path to look up a value from the
+        Archive object and the second is a value which it should be equal to
+        :return: Archive object containing Github Archive data
+
+        :Examples:
+
+                >>> from gharchive import GHArchive
+                >>> gh = GHArchive()
+                ...
+                >>> data = gh.get('6/8/2020', '6/10/2020', filters=[
+                >>>     ('repo.name', 'bitcoin/bitcoin'),
+                >>>     ('type', 'WatchEvent')
+                >>> ])
+        """
         dates = SearchDates(start_date, end_date)
         archive = self._get_many_and_decode(dates, filters)
         return archive
