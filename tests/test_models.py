@@ -1,5 +1,7 @@
 import unittest
 
+import pandas as pd
+
 from gharchive.models import Archive, ArchiveElement
 from tests.config import DATA_FILE
 
@@ -112,3 +114,21 @@ class TestFilterModels(TestCreateModels):
             assert elem.actor.url == compare_str_1
             assert elem.type == compare_str_2
         assert len(archive.data) > 0
+
+
+class TestSerializeModels(TestCreateModels):
+    def test_to_df(self):
+        df = self.archive.to_df()
+
+        assert len(df) == 7427
+        assert len(df.columns) == 141
+
+        first_row = df.iloc[0]
+        assert first_row["id"] == "2489395767"
+        assert first_row["type"] == "PushEvent"
+        assert pd.isnull(first_row["payload_commits_author_email_20"])
+
+        last_row = df.iloc[-1]
+        assert last_row["id"] == "2489418153"
+        assert last_row["type"] == "PushEvent"
+        assert pd.isnull(last_row["payload_commits_author_email_20"])
