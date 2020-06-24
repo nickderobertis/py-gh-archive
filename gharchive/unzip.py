@@ -4,7 +4,7 @@ from types import ModuleType
 
 def decompress(b: bytes) -> bytes:
     import_mod = _get_gzip_module()
-    # TODO: better typing for decompress
+    # TODO [$5ef35e658e4f8000083fdce6]: better typing for decompress
     #
     # Not sure how to specify type annotations to say that
     # import_mod should be a module which has the function decompress.
