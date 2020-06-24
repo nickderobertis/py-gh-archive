@@ -12,6 +12,8 @@ from typing import (
     Union,
 )
 from datetime import datetime
+
+import pandas as pd
 import dateutil.parser
 import requests
 
@@ -73,7 +75,50 @@ def from_datetime(x: Any) -> datetime:
 # for not being earlier in 2011.
 
 
-class Actor:
+class SeriesSerializable:
+    _series_nested_attrs: Sequence[str] = tuple()
+
+    def to_dict(self) -> dict:
+        raise NotImplementedError
+
+    def to_series(self) -> pd.Series:
+        data = self.to_dict()
+        _extract_nested_attrs(self, data, self._series_nested_attrs)
+        return pd.Series(data)
+
+
+def _extract_nested_attrs(
+    obj: SeriesSerializable, data: dict, nested_attrs: Sequence[str]
+):
+    for nested_attr in nested_attrs:
+        del data[nested_attr]
+
+        data_model = getattr(obj, nested_attr)
+        if data_model is None:
+            # Cannot split element as is None
+            continue
+
+        if isinstance(data_model, (list, tuple)):
+            new_data = {}
+            for i, elem in enumerate(data_model):
+                temp_data = elem.to_dict()
+                _extract_nested_attrs(elem, temp_data, elem._series_nested_attrs)
+                new_data.update(
+                    {
+                        f"{nested_attr}_{key}_{i + 1}": value
+                        for key, value in temp_data.items()
+                    }
+                )
+        else:
+            new_data = data_model.to_dict()
+            _extract_nested_attrs(data_model, new_data, data_model._series_nested_attrs)
+            new_data = {
+                f"{nested_attr}_{key}": value for key, value in new_data.items()
+            }
+        data.update(new_data)
+
+
+class Actor(SeriesSerializable):
     id: Optional[int]
     login: Optional[str]
     display_login: Optional[str]
@@ -119,7 +164,7 @@ class Actor:
         return result
 
 
-class Author:
+class Author(SeriesSerializable):
     name: Optional[str]
     email: Optional[str]
 
@@ -141,7 +186,8 @@ class Author:
         return result
 
 
-class Commit:
+class Commit(SeriesSerializable):
+    _series_nested_attrs = ("author",)
     sha: Optional[str]
     author: Optional[Author]
     message: Optional[str]
@@ -184,7 +230,8 @@ class Commit:
         return result
 
 
-class Payload:
+class Payload(SeriesSerializable):
+    _series_nested_attrs = ("commits",)
     ref: Optional[str]
     ref_type: Optional[str]
     pusher_type: Optional[str]
@@ -260,7 +307,7 @@ class Payload:
         return result
 
 
-class Repo:
+class Repo(SeriesSerializable):
     id: Optional[int]
     name: Optional[str]
     url: Optional[str]
@@ -288,7 +335,8 @@ class Repo:
         return result
 
 
-class ArchiveElement:
+class ArchiveElement(SeriesSerializable):
+    _series_nested_attrs = ("actor", "repo", "payload")
     id: Optional[str]
     type: Optional[str]
     actor: Optional[Actor]
@@ -371,17 +419,28 @@ class Archive:
         return cls.from_dict_list(data)
 
     def to_dict_list(self) -> List[dict]:
-        return [elem.to_dict() for elem in self.data]
+        return [elem.to_dict() for elem in self]
+
+    def to_df(self) -> pd.DataFrame:
+        rows = [elem.to_series() for elem in self]
+        df = pd.DataFrame(rows)
+        return df
 
     def __add__(self, other):
         cls = self.__class__
         return cls(self.data + other.data)
 
+    def __getitem__(self, item):
+        return self.data[item]
+
+    def __iter__(self):
+        yield from self.data
+
     def filter(
         self, filters: Sequence[Tuple[str, Union[int, float, str]]]
     ) -> "Archive":
         new_elems = []
-        for elem in self.data:
+        for elem in self:
             valid = True
             for (attr, value) in filters:
                 getattr_list = attr.split(".")
