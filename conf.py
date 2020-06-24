@@ -71,9 +71,7 @@ PACKAGE_INSTALL_REQUIRES = [
 # Keys should be name of the optional feature and values are lists of required packages
 # E.g. {'feature1': ['pandas', 'numpy'], 'feature2': ['matplotlib']}
 OPTIONAL_PACKAGE_INSTALL_REQUIRES = {
-    {
-        'mgzip': ['mgzip'],
-    },
+    'mgzip': ['mgzip'],
 }
 
 # Packages added to Binder environment so that examples can be executed in Binder
