@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gharchive package &mdash; gharchive 0.1.1 documentation</title>
+  <title>gharchive package &mdash; gharchive 0.2.0 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.1.1
+                0.2.0
               </div>
             
           
@@ -266,7 +266,7 @@ Archive object and the second is a value which it should be equal to
 <dl class="py class">
 <dt id="gharchive.models.Actor">
 <em class="property">class </em><code class="sig-prename descclassname">gharchive.models.</code><code class="sig-name descname">Actor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">login</span></em>, <em class="sig-param"><span class="n">display_login</span></em>, <em class="sig-param"><span class="n">gravatar_id</span></em>, <em class="sig-param"><span class="n">url</span></em>, <em class="sig-param"><span class="n">avatar_url</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gharchive/models.html#Actor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gharchive.models.Actor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#gharchive.models.SeriesSerializable" title="gharchive.models.SeriesSerializable"><code class="xref py py-class docutils literal notranslate"><span class="pre">gharchive.models.SeriesSerializable</span></code></a></p>
 <dl class="py method">
 <dt id="gharchive.models.Actor.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">login</span></em>, <em class="sig-param"><span class="n">display_login</span></em>, <em class="sig-param"><span class="n">gravatar_id</span></em>, <em class="sig-param"><span class="n">url</span></em>, <em class="sig-param"><span class="n">avatar_url</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gharchive/models.html#Actor.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gharchive.models.Actor.__init__" title="Permalink to this definition">¶</a></dt>
@@ -366,6 +366,16 @@ Archive object and the second is a value which it should be equal to
 <dd></dd></dl>
 
 <dl class="py method">
+<dt id="gharchive.models.Archive.to_df">
+<code class="sig-name descname">to_df</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gharchive/models.html#Archive.to_df"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gharchive.models.Archive.to_df" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="gharchive.models.Archive.to_dict_list">
 <code class="sig-name descname">to_dict_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gharchive/models.html#Archive.to_dict_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gharchive.models.Archive.to_dict_list" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -380,7 +390,7 @@ Archive object and the second is a value which it should be equal to
 <dl class="py class">
 <dt id="gharchive.models.ArchiveElement">
 <em class="property">class </em><code class="sig-prename descclassname">gharchive.models.</code><code class="sig-name descname">ArchiveElement</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">type</span></em>, <em class="sig-param"><span class="n">actor</span></em>, <em class="sig-param"><span class="n">repo</span></em>, <em class="sig-param"><span class="n">payload</span></em>, <em class="sig-param"><span class="n">public</span></em>, <em class="sig-param"><span class="n">created_at</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gharchive/models.html#ArchiveElement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gharchive.models.ArchiveElement" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#gharchive.models.SeriesSerializable" title="gharchive.models.SeriesSerializable"><code class="xref py py-class docutils literal notranslate"><span class="pre">gharchive.models.SeriesSerializable</span></code></a></p>
 <dl class="py method">
 <dt id="gharchive.models.ArchiveElement.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">type</span></em>, <em class="sig-param"><span class="n">actor</span></em>, <em class="sig-param"><span class="n">repo</span></em>, <em class="sig-param"><span class="n">payload</span></em>, <em class="sig-param"><span class="n">public</span></em>, <em class="sig-param"><span class="n">created_at</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gharchive/models.html#ArchiveElement.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gharchive.models.ArchiveElement.__init__" title="Permalink to this definition">¶</a></dt>
@@ -447,7 +457,7 @@ Archive object and the second is a value which it should be equal to
 <dl class="py class">
 <dt id="gharchive.models.Author">
 <em class="property">class </em><code class="sig-prename descclassname">gharchive.models.</code><code class="sig-name descname">Author</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">email</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gharchive/models.html#Author"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gharchive.models.Author" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#gharchive.models.SeriesSerializable" title="gharchive.models.SeriesSerializable"><code class="xref py py-class docutils literal notranslate"><span class="pre">gharchive.models.SeriesSerializable</span></code></a></p>
 <dl class="py method">
 <dt id="gharchive.models.Author.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">email</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gharchive/models.html#Author.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gharchive.models.Author.__init__" title="Permalink to this definition">¶</a></dt>
@@ -489,7 +499,7 @@ Archive object and the second is a value which it should be equal to
 <dl class="py class">
 <dt id="gharchive.models.Commit">
 <em class="property">class </em><code class="sig-prename descclassname">gharchive.models.</code><code class="sig-name descname">Commit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sha</span></em>, <em class="sig-param"><span class="n">author</span></em>, <em class="sig-param"><span class="n">message</span></em>, <em class="sig-param"><span class="n">distinct</span></em>, <em class="sig-param"><span class="n">url</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gharchive/models.html#Commit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gharchive.models.Commit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#gharchive.models.SeriesSerializable" title="gharchive.models.SeriesSerializable"><code class="xref py py-class docutils literal notranslate"><span class="pre">gharchive.models.SeriesSerializable</span></code></a></p>
 <dl class="py method">
 <dt id="gharchive.models.Commit.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sha</span></em>, <em class="sig-param"><span class="n">author</span></em>, <em class="sig-param"><span class="n">message</span></em>, <em class="sig-param"><span class="n">distinct</span></em>, <em class="sig-param"><span class="n">url</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gharchive/models.html#Commit.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gharchive.models.Commit.__init__" title="Permalink to this definition">¶</a></dt>
@@ -546,7 +556,7 @@ Archive object and the second is a value which it should be equal to
 <dl class="py class">
 <dt id="gharchive.models.Payload">
 <em class="property">class </em><code class="sig-prename descclassname">gharchive.models.</code><code class="sig-name descname">Payload</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ref</span></em>, <em class="sig-param"><span class="n">ref_type</span></em>, <em class="sig-param"><span class="n">pusher_type</span></em>, <em class="sig-param"><span class="n">push_id</span></em>, <em class="sig-param"><span class="n">size</span></em>, <em class="sig-param"><span class="n">distinct_size</span></em>, <em class="sig-param"><span class="n">head</span></em>, <em class="sig-param"><span class="n">before</span></em>, <em class="sig-param"><span class="n">commits</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gharchive/models.html#Payload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gharchive.models.Payload" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#gharchive.models.SeriesSerializable" title="gharchive.models.SeriesSerializable"><code class="xref py py-class docutils literal notranslate"><span class="pre">gharchive.models.SeriesSerializable</span></code></a></p>
 <dl class="py method">
 <dt id="gharchive.models.Payload.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ref</span></em>, <em class="sig-param"><span class="n">ref_type</span></em>, <em class="sig-param"><span class="n">pusher_type</span></em>, <em class="sig-param"><span class="n">push_id</span></em>, <em class="sig-param"><span class="n">size</span></em>, <em class="sig-param"><span class="n">distinct_size</span></em>, <em class="sig-param"><span class="n">head</span></em>, <em class="sig-param"><span class="n">before</span></em>, <em class="sig-param"><span class="n">commits</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gharchive/models.html#Payload.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gharchive.models.Payload.__init__" title="Permalink to this definition">¶</a></dt>
@@ -623,7 +633,7 @@ Archive object and the second is a value which it should be equal to
 <dl class="py class">
 <dt id="gharchive.models.Repo">
 <em class="property">class </em><code class="sig-prename descclassname">gharchive.models.</code><code class="sig-name descname">Repo</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">url</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gharchive/models.html#Repo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gharchive.models.Repo" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#gharchive.models.SeriesSerializable" title="gharchive.models.SeriesSerializable"><code class="xref py py-class docutils literal notranslate"><span class="pre">gharchive.models.SeriesSerializable</span></code></a></p>
 <dl class="py method">
 <dt id="gharchive.models.Repo.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">url</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gharchive/models.html#Repo.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gharchive.models.Repo.__init__" title="Permalink to this definition">¶</a></dt>
@@ -664,6 +674,32 @@ Archive object and the second is a value which it should be equal to
 <dt id="gharchive.models.Repo.url">
 <code class="sig-name descname">url</code><em class="property">: Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">]</span></em><a class="headerlink" href="#gharchive.models.Repo.url" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gharchive.models.SeriesSerializable">
+<em class="property">class </em><code class="sig-prename descclassname">gharchive.models.</code><code class="sig-name descname">SeriesSerializable</code><a class="reference internal" href="../_modules/gharchive/models.html#SeriesSerializable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gharchive.models.SeriesSerializable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt id="gharchive.models.SeriesSerializable.to_dict">
+<code class="sig-name descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gharchive/models.html#SeriesSerializable.to_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gharchive.models.SeriesSerializable.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gharchive.models.SeriesSerializable.to_series">
+<code class="sig-name descname">to_series</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gharchive/models.html#SeriesSerializable.to_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gharchive.models.SeriesSerializable.to_series" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
