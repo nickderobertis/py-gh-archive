@@ -1,10 +1,7 @@
 import unittest
-import os
 
 from gharchive.models import Archive, ArchiveElement
-
-DATA_DIR = os.path.join("tests", "data")
-DATA_FILE = os.path.join(DATA_DIR, "2015-01-01-1.json.gz")
+from tests.config import DATA_FILE
 
 
 class TestCreateModels(unittest.TestCase):

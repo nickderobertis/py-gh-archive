@@ -62,13 +62,18 @@ PACKAGE_INSTALL_REQUIRES = [
     # e.g.
     # 'package',
     # 'otherpackage>=1,<2'
+    'pandas',
+    'dateutil',
+    'requests',
 ]
 
 # Add any third party packages you use in requirements for optional features of your package here
 # Keys should be name of the optional feature and values are lists of required packages
 # E.g. {'feature1': ['pandas', 'numpy'], 'feature2': ['matplotlib']}
 OPTIONAL_PACKAGE_INSTALL_REQUIRES = {
-
+    {
+        'mgzip': ['mgzip'],
+    },
 }
 
 # Packages added to Binder environment so that examples can be executed in Binder
