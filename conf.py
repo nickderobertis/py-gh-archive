@@ -20,7 +20,7 @@ REPO_MAINTAINERS = [
 ]
 
 # Package version in the format (major, minor, release)
-PACKAGE_VERSION_TUPLE = (0, 2, 1)
+PACKAGE_VERSION_TUPLE = (0, 2, 2)
 
 # Short description of the package
 PACKAGE_SHORT_DESCRIPTION = "Python SDK to access Github Archive"
@@ -63,7 +63,7 @@ PACKAGE_INSTALL_REQUIRES = [
     # 'package',
     # 'otherpackage>=1,<2'
     'pandas',
-    'dateutil',
+    'python-dateutil',
     'requests',
 ]
 
