@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gharchive package &mdash; gharchive 0.1.0 documentation</title>
+  <title>gharchive package &mdash; gharchive 0.1.1 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.1.1
               </div>
             
           
@@ -108,6 +108,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#module-gharchive.main">gharchive.main module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-gharchive.models">gharchive.models module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-gharchive.search">gharchive.search module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-gharchive.unzip">gharchive.unzip module</a></li>
 </ul>
 </li>
 </ul>
@@ -270,11 +271,6 @@ Archive object and the second is a value which it should be equal to
 <dt id="gharchive.models.Actor.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">login</span></em>, <em class="sig-param"><span class="n">display_login</span></em>, <em class="sig-param"><span class="n">gravatar_id</span></em>, <em class="sig-param"><span class="n">url</span></em>, <em class="sig-param"><span class="n">avatar_url</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gharchive/models.html#Actor.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gharchive.models.Actor.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -389,11 +385,6 @@ Archive object and the second is a value which it should be equal to
 <dt id="gharchive.models.ArchiveElement.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">type</span></em>, <em class="sig-param"><span class="n">actor</span></em>, <em class="sig-param"><span class="n">repo</span></em>, <em class="sig-param"><span class="n">payload</span></em>, <em class="sig-param"><span class="n">public</span></em>, <em class="sig-param"><span class="n">created_at</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gharchive/models.html#ArchiveElement.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gharchive.models.ArchiveElement.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -461,11 +452,6 @@ Archive object and the second is a value which it should be equal to
 <dt id="gharchive.models.Author.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">email</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gharchive/models.html#Author.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gharchive.models.Author.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -508,11 +494,6 @@ Archive object and the second is a value which it should be equal to
 <dt id="gharchive.models.Commit.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sha</span></em>, <em class="sig-param"><span class="n">author</span></em>, <em class="sig-param"><span class="n">message</span></em>, <em class="sig-param"><span class="n">distinct</span></em>, <em class="sig-param"><span class="n">url</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gharchive/models.html#Commit.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gharchive.models.Commit.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -570,11 +551,6 @@ Archive object and the second is a value which it should be equal to
 <dt id="gharchive.models.Payload.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ref</span></em>, <em class="sig-param"><span class="n">ref_type</span></em>, <em class="sig-param"><span class="n">pusher_type</span></em>, <em class="sig-param"><span class="n">push_id</span></em>, <em class="sig-param"><span class="n">size</span></em>, <em class="sig-param"><span class="n">distinct_size</span></em>, <em class="sig-param"><span class="n">head</span></em>, <em class="sig-param"><span class="n">before</span></em>, <em class="sig-param"><span class="n">commits</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gharchive/models.html#Payload.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gharchive.models.Payload.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -652,11 +628,6 @@ Archive object and the second is a value which it should be equal to
 <dt id="gharchive.models.Repo.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">url</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gharchive/models.html#Repo.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gharchive.models.Repo.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -799,6 +770,19 @@ Archive object and the second is a value which it should be equal to
 <code class="sig-name descname">strings</code><em class="property">: List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">]</span></em><a class="headerlink" href="#gharchive.search.SearchDates.strings" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+</dd></dl>
+
+</div>
+<div class="section" id="module-gharchive.unzip">
+<span id="gharchive-unzip-module"></span><h2>gharchive.unzip module<a class="headerlink" href="#module-gharchive.unzip" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="gharchive.unzip.decompress">
+<code class="sig-prename descclassname">gharchive.unzip.</code><code class="sig-name descname">decompress</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">b</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gharchive/unzip.html#decompress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gharchive.unzip.decompress" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

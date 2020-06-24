@@ -49,3 +49,11 @@ gharchive.search module
    :undoc-members:
    :show-inheritance:
 
+gharchive.unzip module
+----------------------
+
+.. automodule:: gharchive.unzip
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

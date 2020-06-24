@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gharchive.models &mdash; gharchive 0.1.0 documentation</title>
+  <title>gharchive.models &mdash; gharchive 0.1.1 documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.1.1
               </div>
             
           
@@ -164,8 +164,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for gharchive.models</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">gzip</span>
-<span class="kn">import</span> <span class="nn">json</span>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">Optional</span><span class="p">,</span>
     <span class="n">Any</span><span class="p">,</span>
@@ -181,6 +180,8 @@
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">import</span> <span class="nn">dateutil.parser</span>
 <span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="kn">from</span> <span class="nn">gharchive.unzip</span> <span class="kn">import</span> <span class="n">decompress</span>
 
 <span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
 
@@ -228,7 +229,7 @@
     <span class="k">return</span> <span class="n">dateutil</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
 
 
-<span class="c1"># TODO: support Timeline API format</span>
+<span class="c1"># TODO [#1]: support Timeline API format</span>
 <span class="c1">#</span>
 <span class="c1"># Any records from 2/12/2011-12/31/2014 were from the deprecated Timeline API</span>
 <span class="c1"># and so come in a different format. Need to parse them into the same models.</span>
@@ -527,7 +528,7 @@
 
 <div class="viewcode-block" id="Archive.from_gzip_bytes"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Archive.from_gzip_bytes">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_gzip_bytes</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
-        <span class="n">data_str</span> <span class="o">=</span> <span class="n">gzip</span><span class="o">.</span><span class="n">decompress</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
+        <span class="n">data_str</span> <span class="o">=</span> <span class="n">decompress</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
         <span class="n">data_strs</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">data_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">s</span><span class="p">]</span>
         <span class="k">del</span> <span class="n">data_str</span>
         <span class="n">json_str</span> <span class="o">=</span> <span class="s2">&quot;[&quot;</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_strs</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>

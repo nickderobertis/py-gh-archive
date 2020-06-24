@@ -1,1 +1,5 @@
+pandas
+mgzip
+requests
 gharchive
+dateutil

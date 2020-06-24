@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gharchive.exc &mdash; gharchive 0.1.1 documentation</title>
+  <title>gharchive.unzip &mdash; gharchive 0.1.1 documentation</title>
   
 
   
@@ -148,7 +148,7 @@
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
-      <li>gharchive.exc</li>
+      <li>gharchive.unzip</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -163,14 +163,32 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for gharchive.exc</h1><div class="highlight"><pre>
-<span></span>
-<div class="viewcode-block" id="NoArchiveForDateException"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.exc.NoArchiveForDateException">[docs]</a><span class="k">class</span> <span class="nc">NoArchiveForDateException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-    <span class="k">pass</span></div>
+  <h1>Source code for gharchive.unzip</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Set gzip module</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">ModuleType</span>
 
 
-<div class="viewcode-block" id="NoArchiveMatchingCriteraException"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.exc.NoArchiveMatchingCriteraException">[docs]</a><span class="k">class</span> <span class="nc">NoArchiveMatchingCriteraException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-    <span class="k">pass</span></div>
+<div class="viewcode-block" id="decompress"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.unzip.decompress">[docs]</a><span class="k">def</span> <span class="nf">decompress</span><span class="p">(</span><span class="n">b</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+    <span class="n">import_mod</span> <span class="o">=</span> <span class="n">_get_gzip_module</span><span class="p">()</span>
+    <span class="c1"># TODO: better typing for decompress</span>
+    <span class="c1">#</span>
+    <span class="c1"># Not sure how to specify type annotations to say that</span>
+    <span class="c1"># import_mod should be a module which has the function decompress.</span>
+    <span class="c1"># Once this is determined I can remove the type ignore</span>
+    <span class="k">return</span> <span class="n">import_mod</span><span class="o">.</span><span class="n">decompress</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>  <span class="c1"># type: ignore</span></div>
+
+
+<span class="k">def</span> <span class="nf">_get_gzip_module</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ModuleType</span><span class="p">:</span>
+    <span class="n">import_mod</span><span class="p">:</span> <span class="n">ModuleType</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">mgzip</span>
+
+        <span class="n">import_mod</span> <span class="o">=</span> <span class="n">mgzip</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">gzip</span>
+
+        <span class="n">import_mod</span> <span class="o">=</span> <span class="n">gzip</span>
+    <span class="k">return</span> <span class="n">import_mod</span>
 </pre></div>
 
            </div>
