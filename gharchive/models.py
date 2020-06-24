@@ -395,6 +395,7 @@ class ArchiveElement(SeriesSerializable):
 
 class Archive:
     data: List[ArchiveElement]
+    _date_cols: Sequence[str] = ('created_at',)
 
     def __init__(self, data: List[ArchiveElement]):
         self.data = data
@@ -424,6 +425,8 @@ class Archive:
     def to_df(self) -> pd.DataFrame:
         rows = [elem.to_series() for elem in self]
         df = pd.DataFrame(rows)
+        for date_col in self._date_cols:
+            df[date_col] = pd.to_datetime(df[date_col])
         return df
 
     def __add__(self, other):

@@ -1,6 +1,7 @@
 import unittest
 
 import pandas as pd
+from pandas import DatetimeTZDtype
 
 from gharchive.models import Archive, ArchiveElement
 from tests.config import DATA_FILE
@@ -122,6 +123,7 @@ class TestSerializeModels(TestCreateModels):
 
         assert len(df) == 7427
         assert len(df.columns) == 141
+        assert isinstance(df.dtypes['created_at'], DatetimeTZDtype)
 
         first_row = df.iloc[0]
         assert first_row["id"] == "2489395767"
