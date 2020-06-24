@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gharchive.models &mdash; gharchive 0.2.0 documentation</title>
+  <title>gharchive.models &mdash; gharchive 0.2.1 documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.2.0
+                0.2.1
               </div>
             
           
@@ -561,6 +561,7 @@
 
 <div class="viewcode-block" id="Archive"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Archive">[docs]</a><span class="k">class</span> <span class="nc">Archive</span><span class="p">:</span>
     <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ArchiveElement</span><span class="p">]</span>
+    <span class="n">_date_cols</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;created_at&#39;</span><span class="p">,)</span>
 
 <div class="viewcode-block" id="Archive.__init__"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Archive.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ArchiveElement</span><span class="p">]):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span></div>
@@ -590,6 +591,8 @@
 <div class="viewcode-block" id="Archive.to_df"><a class="viewcode-back" href="../../api/gharchive.html#gharchive.models.Archive.to_df">[docs]</a>    <span class="k">def</span> <span class="nf">to_df</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
         <span class="n">rows</span> <span class="o">=</span> <span class="p">[</span><span class="n">elem</span><span class="o">.</span><span class="n">to_series</span><span class="p">()</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">]</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">date_col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_date_cols</span><span class="p">:</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">date_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">date_col</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">df</span></div>
 
     <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>

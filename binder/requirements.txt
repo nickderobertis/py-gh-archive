@@ -1,5 +1,5 @@
-pandas
-dateutil
-gharchive
 mgzip
+dateutil
 requests
+gharchive
+pandas
