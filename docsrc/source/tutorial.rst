@@ -8,6 +8,11 @@ Install via::
 
     pip install gharchive
 
+
+Or, for multi-processing in extracting archives::
+
+    pip install gharchive[mgzip]
+
 Usage
 =========
 

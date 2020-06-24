@@ -1,4 +1,3 @@
-import gzip
 import json
 from typing import (
     Optional,
@@ -15,6 +14,8 @@ from typing import (
 from datetime import datetime
 import dateutil.parser
 import requests
+
+from gharchive.unzip import decompress
 
 T = TypeVar("T")
 
@@ -361,7 +362,7 @@ class Archive:
 
     @classmethod
     def from_gzip_bytes(cls, b: bytes):
-        data_str = gzip.decompress(b).decode("utf8")
+        data_str = decompress(b).decode("utf8")
         data_strs = [s for s in data_str.split("\n") if s]
         del data_str
         json_str = "[" + ", ".join(data_strs) + "]"

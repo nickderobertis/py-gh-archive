@@ -24,6 +24,6 @@ cruft = "*"
 requests = "*"
 jupyterlab = "*"
 pandas = "*"
-
-[requires]
-python_version = "3.7"
+mgzip = "*"
+importlib_metadata = "*"
+pytest-ordering = "*"
